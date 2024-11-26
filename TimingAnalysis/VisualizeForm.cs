@@ -13,14 +13,14 @@ namespace TimingAnalysis
         int _signal_length;
         private bool isBlack = true;
         List<String> titles = new List<String>();
-        List<Dictionary<String, List<double>>> withStimulation = new List<Dictionary<String, List<double>>>();
-        List<Dictionary<String, List<double>>> withoutStimulation = new List<Dictionary<String, List<double>>>();
+        List<Dictionary<String, double[]>> withStimulation = new List<Dictionary<String, double[]>>();
+        List<Dictionary<String, double[]>> withoutStimulation = new List<Dictionary<String, double[]>>();
         bool timerFlag = false;
         bool signalFlag = false;
         bool withWithoutFlag = false;
-        Dictionary<string, List<double>> helpD = new Dictionary<string, List<double>>();
-        int n = 0;
-        int m = 0;
+        Dictionary<string, double[]> helpD = new Dictionary<string, double[]>();
+        int[] wt = new int[29];
+        int[] wto = new int[29];
         List<DateTime> with = new List<DateTime>();
         List<DateTime> without = new List<DateTime>();
 
@@ -64,7 +64,7 @@ namespace TimingAnalysis
             reseiveClientControl1.Client.StartClient();
             for (int i = 0; i < 29; i++)
             {
-                helpD.Add(titles[i], new List<double>());
+                helpD.Add(titles[i], new double[signal_length]);
             }
 
         }
@@ -78,6 +78,7 @@ namespace TimingAnalysis
                 var bucket = new double[29, 24];
                 var data = f.Data;
                 
+
                 if (timerFlag)
                 {
                     
@@ -93,73 +94,52 @@ namespace TimingAnalysis
                             if (withWithoutFlag)
                             {
                                 // Проверка, что размер данных меньше _signal_length перед добавлением
-                                if (helpD.Any(x => x.Value.Count < _signal_length))
+                                if (wt[i] < _signal_length)
                                 {
-                                    if (helpD[titles[i]].Count < _signal_length)
-                                        helpD[titles[i]].Add(bucket[i, j]);
+                                    
+                                        helpD[titles[i]][wt[i]] = bucket[i, j];
+                                    wt[i]++;
                                 }
                                 else
                                 {
                                     // Данные собраны, меняем флаг
                                     timerFlag = false;
-                                    if (helpD.All(x => x.Value.Count == _signal_length))
-                                    {
-                                        if ((withWithoutFlag))
-                                        {
                                             withStimulation.Add(helpD);
-
-                                        }
-                                        else
-                                        {
-                                            withoutStimulation.Add(helpD);
-
-
-                                        }
-                                        with.Add(DateTime.Now);
-                                        helpD = new Dictionary<string, List<double>>();
+                                    wt = new int[29];
+                                    with.Add(DateTime.Now);
+                                        helpD = new Dictionary<string, double[]>();
                                         for (int k = 0; k < 29; k++)
                                         {
-                                            helpD.Add(titles[k], new List<double>());
+                                            helpD.Add(titles[k], new double[_signal_length]);
                                         }
                                         break;
                                     }
                                    
                                 }
-                            }
+                            
                             else
                             {
-                                // Проверка, что размер данных меньше _signal_length перед добавлением
-                                if (helpD.Any(x => x.Value.Count < _signal_length))
-                                {
-                                    if (helpD[titles[i]].Count < _signal_length)
-                                        helpD[titles[i]].Add(bucket[i, j]);
+                            // Проверка, что размер данных меньше _signal_length перед добавлением
+                            if (wto[i] < _signal_length)
+                            {
+
+                                helpD[titles[i]][wto[i]] = bucket[i, j];
+                                    wto[i]++;
                                 }
-                                else
+                            else
                                 {
                                     // Данные собраны, меняем флаг
                                     timerFlag = false;
-                                    
-                                    if (helpD.All(x => x.Value.Count == _signal_length))
-                                    {
-                                        if ((withWithoutFlag))
-                                        {
-                                            withStimulation.Add(helpD);
-
-                                        }
-                                        else
-                                        {
+                                    wto = new int[29];
                                             withoutStimulation.Add(helpD);
-
-
-                                        }
                                         without.Add(DateTime.Now);
-                                        helpD = new Dictionary<string, List<double>>();
+                                        helpD = new Dictionary<string, double[]>();
                                         for (int k = 0; k < 29; k++)
                                         {
-                                            helpD.Add(titles[k], new List<double>());
+                                            helpD.Add(titles[k], new double[_signal_length]);
                                         }
                                         break;
-                                    }
+                                    
                                 }
                             }
                         }
@@ -200,7 +180,7 @@ namespace TimingAnalysis
 
                     if (signalFlag)
                     {
-                        n++;
+                      
                         withWithoutFlag = false;
                         timerFlag = true;
                     }
@@ -211,7 +191,7 @@ namespace TimingAnalysis
                     
                     if (signalFlag)
                     {
-                        m++;
+                
                         withWithoutFlag = true;
                         timerFlag = true;
                     }
@@ -247,6 +227,8 @@ namespace TimingAnalysis
                     // Записываем данные без стимулирования
                     writer.WriteLine("Without Stimulation:");
                     WriteListToFile(writer, withoutStimulation);
+                    with.AddRange(without);
+                    with.Sort();
 
                     Console.WriteLine("Данные успешно записаны в файл.");
                 }
@@ -258,20 +240,20 @@ namespace TimingAnalysis
             reseiveClientControl1.Client.StopClient();
         }
         private void WriteListToFile(StreamWriter writer,
-        List<Dictionary<string, List<double>>> data)
+        List<Dictionary<string, double[]>> data)
         {
-            //foreach (var dictionary in data)
-            //{
-            //    foreach (var kvp in dictionary)
-            //    {
-            //        // Записываем ключ
-            //        writer.Write(kvp.Key + ": ");
+            foreach (var dictionary in data)
+            {
+                foreach (var kvp in dictionary)
+                {
+                    // Записываем ключ
+                    writer.Write(kvp.Key + ": ");
 
-            //        // Записываем значения в список чисел
-            //        writer.WriteLine(string.Join(", ", kvp.Value));
-            //    }
-            //    writer.WriteLine(); // Пустая строка между словарями
-            //}
+                    // Записываем значения в список чисел
+                    writer.WriteLine(string.Join(", ", kvp.Value));
+                }
+                writer.WriteLine(); // Пустая строка между словарями
+            }
             List<List<double>> avgList = new List<List<double>>();
             for(int i = 0; i< 29; i++)
             {
