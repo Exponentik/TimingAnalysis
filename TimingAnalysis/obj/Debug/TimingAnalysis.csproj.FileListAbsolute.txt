@@ -12,3 +12,17 @@ C:\Users\user\Desktop\TimingAnalysis\TimingAnalysis\obj\Debug\TimingAnalysis.pdb
 C:\Users\user\Desktop\TimingAnalysis\TimingAnalysis\bin\Debug\FoundationLibrary.dll
 C:\Users\user\Desktop\TimingAnalysis\TimingAnalysis\bin\Debug\NetManager.dll
 C:\Users\user\Desktop\TimingAnalysis\TimingAnalysis\obj\Debug\TimingAn.6B9491D9.Up2Date
+C:\Users\ghost\OneDrive\Рабочий стол\TimingAnalysis\TimingAnalysis\bin\Debug\TimingAnalysis.exe.config
+C:\Users\ghost\OneDrive\Рабочий стол\TimingAnalysis\TimingAnalysis\bin\Debug\TimingAnalysis.exe
+C:\Users\ghost\OneDrive\Рабочий стол\TimingAnalysis\TimingAnalysis\bin\Debug\TimingAnalysis.pdb
+C:\Users\ghost\OneDrive\Рабочий стол\TimingAnalysis\TimingAnalysis\bin\Debug\FoundationLibrary.dll
+C:\Users\ghost\OneDrive\Рабочий стол\TimingAnalysis\TimingAnalysis\bin\Debug\NetManager.dll
+C:\Users\ghost\OneDrive\Рабочий стол\TimingAnalysis\TimingAnalysis\obj\Debug\TimingAnalysis.csprojAssemblyReference.cache
+C:\Users\ghost\OneDrive\Рабочий стол\TimingAnalysis\TimingAnalysis\obj\Debug\TimingAnalysis.SettingsForm.resources
+C:\Users\ghost\OneDrive\Рабочий стол\TimingAnalysis\TimingAnalysis\obj\Debug\TimingAnalysis.Properties.Resources.resources
+C:\Users\ghost\OneDrive\Рабочий стол\TimingAnalysis\TimingAnalysis\obj\Debug\TimingAnalysis.VisualizeForm.resources
+C:\Users\ghost\OneDrive\Рабочий стол\TimingAnalysis\TimingAnalysis\obj\Debug\TimingAnalysis.csproj.GenerateResource.cache
+C:\Users\ghost\OneDrive\Рабочий стол\TimingAnalysis\TimingAnalysis\obj\Debug\TimingAnalysis.csproj.CoreCompileInputs.cache
+C:\Users\ghost\OneDrive\Рабочий стол\TimingAnalysis\TimingAnalysis\obj\Debug\TimingAnalysis.csproj.CopyComplete
+C:\Users\ghost\OneDrive\Рабочий стол\TimingAnalysis\TimingAnalysis\obj\Debug\TimingAnalysis.exe
+C:\Users\ghost\OneDrive\Рабочий стол\TimingAnalysis\TimingAnalysis\obj\Debug\TimingAnalysis.pdb

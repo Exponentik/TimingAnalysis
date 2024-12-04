@@ -11,6 +11,7 @@ namespace TimingAnalysis
     public partial class VisualizeForm : Form
     {
         int _signal_length;
+        int _stimulation_frequency;
         private bool isBlack = true;
         List<String> titles = new List<String>();
         List<Dictionary<String, double[]>> withStimulation = new List<Dictionary<String, double[]>>();
@@ -19,17 +20,17 @@ namespace TimingAnalysis
         bool signalFlag = false;
         bool withWithoutFlag = false;
         Dictionary<string, double[]> helpD = new Dictionary<string, double[]>();
-        int[] wt = new int[29];
-        int[] wto = new int[29];
+        int[] currentDataLen = new int[29];
         List<DateTime> with = new List<DateTime>();
         List<DateTime> without = new List<DateTime>();
 
 
-        public VisualizeForm(int interval, int signal_length)
+        public VisualizeForm(int interval, int signal_length, int stimulation_frequency)
         {
             InitializeComponent();
             stimulationTimer.Interval = interval;
             _signal_length = signal_length;
+            _stimulation_frequency = stimulation_frequency;
             stimulationTimer.Start();
 
             titles.Add("FP1");
@@ -81,67 +82,14 @@ namespace TimingAnalysis
 
                 if (timerFlag)
                 {
-                    
-
-                    
-                    
                     for (int i = 0; i < 29; i++)
                     {
                         for (int j = 0; j < 24; j++)
                         {
                             bucket[i, j] = Convert.ToDouble(data[i * 24 + j]);
 
-                            if (withWithoutFlag)
-                            {
-                                // Проверка, что размер данных меньше _signal_length перед добавлением
-                                if (wt[i] < _signal_length)
-                                {
-                                    
-                                        helpD[titles[i]][wt[i]] = bucket[i, j];
-                                    wt[i]++;
-                                }
-                                else
-                                {
-                                    // Данные собраны, меняем флаг
-                                    timerFlag = false;
-                                            withStimulation.Add(helpD);
-                                    wt = new int[29];
-                                    with.Add(DateTime.Now);
-                                        helpD = new Dictionary<string, double[]>();
-                                        for (int k = 0; k < 29; k++)
-                                        {
-                                            helpD.Add(titles[k], new double[_signal_length]);
-                                        }
-                                        break;
-                                    }
-                                   
-                                }
-                            
-                            else
-                            {
-                            // Проверка, что размер данных меньше _signal_length перед добавлением
-                            if (wto[i] < _signal_length)
-                            {
-
-                                helpD[titles[i]][wto[i]] = bucket[i, j];
-                                    wto[i]++;
-                                }
-                            else
-                                {
-                                    // Данные собраны, меняем флаг
-                                    timerFlag = false;
-                                    wto = new int[29];
-                                            withoutStimulation.Add(helpD);
-                                        without.Add(DateTime.Now);
-                                        helpD = new Dictionary<string, double[]>();
-                                        for (int k = 0; k < 29; k++)
-                                        {
-                                            helpD.Add(titles[k], new double[_signal_length]);
-                                        }
-                                        break;
-                                    
-                                }
-                            }
+                            stimulationDataAccumulation(bucket[i, j], i);
+                        
                         }
                     }
                     
@@ -162,6 +110,38 @@ namespace TimingAnalysis
 
 
         }
+
+        private void stimulationDataAccumulation(double currData, int i)
+        {
+            if (currentDataLen[i] < _signal_length)
+            {
+                helpD[titles[i]][currentDataLen[i]] = currData;
+                currentDataLen[i]++;
+            }
+            else
+            {
+                if (currentDataLen.All(x => x == _signal_length))
+                {
+                    timerFlag = false;
+                    if (withWithoutFlag)
+                    {
+                        withStimulation.Add(helpD);
+                    }
+                    else
+                    {
+                        withoutStimulation.Add(helpD);
+                    }
+                    currentDataLen = new int[29];
+                    //with.Add(DateTime.Now);
+                    helpD = new Dictionary<string, double[]>();
+                    for (int k = 0; k < 29; k++)
+                    {
+                        helpD.Add(titles[k], new double[_signal_length]);
+                    }
+                    
+                }
+            }
+        }
         private void stimulationTimer_Tick(object sender, EventArgs e)
         {
 
@@ -170,31 +150,20 @@ namespace TimingAnalysis
 
         private void colorChangeTimer_Tick(object sender, EventArgs e)
         {
-            var rnd = new Random().Next(0, 3);
+            var rnd = new Random().Next(0, _stimulation_frequency);
             if (isBlack)
             {
                 
                 
                 if (rnd == 0)
                 {
-
-                    if (signalFlag)
-                    {
-                      
-                        withWithoutFlag = false;
-                        timerFlag = true;
-                    }
+                    flagsChanging(false, true);
                 }
                 else
                 {
                     mainPictureBox.BackColor = Color.White;
-                    
-                    if (signalFlag)
-                    {
-                
-                        withWithoutFlag = true;
-                        timerFlag = true;
-                    }
+
+                    flagsChanging(true, true);
                 }
 
             }
@@ -211,11 +180,27 @@ namespace TimingAnalysis
             
         }
 
+        private void flagsChanging(bool wtWto, bool timer)
+        {
+            if (signalFlag)
+            {
+                withWithoutFlag = wtWto;
+                timerFlag = timer;
+            }
+        }
+
+        
+
         private void VisualizeForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             try
             {
-                using (StreamWriter writer = new StreamWriter("C:\\Users\\user\\Desktop\\TimingAnalysis\\TimingAnalysis\\res.txt"))
+                string directoryPath = Path.Combine("..", "results");
+
+                // Создаем директорию, если она не существует
+                Directory.CreateDirectory(directoryPath);
+                string fileName = $"res_{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.txt";
+                using (StreamWriter writer = new StreamWriter(Path.Combine("..\\results", fileName)))
                 {
                     // Записываем данные с стимулированием
                     writer.WriteLine("With Stimulation:");
@@ -244,22 +229,39 @@ namespace TimingAnalysis
         {
             foreach (var dictionary in data)
             {
-                foreach (var kvp in dictionary)
+                for (int i = 0; i < _signal_length; i++)
                 {
-                    // Записываем ключ
-                    writer.Write(kvp.Key + ": ");
-
-                    // Записываем значения в список чисел
-                    writer.WriteLine(string.Join(", ", kvp.Value));
+                    for(int j = 0; j<29;j++)
+                    {
+                        writer.Write(dictionary[titles[j]][i] + "\t");
+                    }
+                    writer.Write("\n");
                 }
-                writer.WriteLine(); // Пустая строка между словарями
+                writer.WriteLine();
+                writer.WriteLine("------------------------------------------------------");
+                writer.WriteLine();
+
             }
+
+            List<List<double>> avgList = avgListCalc(data);
+            writer.WriteLine("AVG:");
+            for (int i = 0; i < _signal_length; i++)
+            {
+                for (int j = 0; j < 29; j++)
+                {
+                    writer.Write(avgList[j][i] + "\t");
+                }
+                writer.Write("\n");
+            }
+        }
+        private List<List<double>> avgListCalc(List<Dictionary<string, double[]>> data)
+        {
             List<List<double>> avgList = new List<List<double>>();
-            for(int i = 0; i< 29; i++)
+            for (int i = 0; i < 29; i++)
             {
                 avgList.Add(new List<double>());
 
-                for (int k = 0; k < _signal_length; k++) 
+                for (int k = 0; k < _signal_length; k++)
                 {
 
                     double sum = 0;
@@ -267,25 +269,16 @@ namespace TimingAnalysis
                     {
                         sum += data[j][titles[i]][k];
                     }
-                    if(sum != 0)
+                    if (sum != 0)
                         avgList[avgList.Count - 1].Add(sum / data.Count);
                     else
-                    avgList[avgList.Count - 1].Add(0);
+                        avgList[avgList.Count - 1].Add(0);
 
 
                 }
 
             }
-            writer.WriteLine("AVG:");
-            foreach (var kvp in titles)
-            {
-                // Записываем ключ
-                writer.Write(kvp + ": ");
-
-                // Записываем значения в список чисел
-                writer.WriteLine(string.Join(", ", avgList[titles.IndexOf(kvp)]));
-            }
-
+            return avgList;
         }
     }
 }
