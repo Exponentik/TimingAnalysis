@@ -34,6 +34,7 @@
             this.stimulationTimer = new System.Windows.Forms.Timer(this.components);
             this.colorChangeTimer = new System.Windows.Forms.Timer(this.components);
             this.reseiveClientControl1 = new NetManager.Client.ReseiveClientControl();
+            this.intervalTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -67,6 +68,10 @@
             this.reseiveClientControl1.TabIndex = 1;
             this.reseiveClientControl1.ReseiveData += new System.EventHandler<NetManager.EventClientMsgArgs>(this.MessageHandler);
             // 
+            // intervalTimer
+            // 
+            this.intervalTimer.Tick += new System.EventHandler(this.intervalTimer_Tick);
+            // 
             // VisualizeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -88,5 +93,6 @@
         private System.Windows.Forms.Timer stimulationTimer;
         private System.Windows.Forms.Timer colorChangeTimer;
         private NetManager.Client.ReseiveClientControl reseiveClientControl1;
+        private System.Windows.Forms.Timer intervalTimer;
     }
 }

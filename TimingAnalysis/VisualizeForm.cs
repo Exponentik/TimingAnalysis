@@ -12,6 +12,7 @@ namespace TimingAnalysis
     {
         int _signal_length;
         int _stimulation_frequency;
+        int _interval;
         private bool isBlack = true;
         List<String> titles = new List<String>();
         List<Dictionary<String, double[]>> withStimulation = new List<Dictionary<String, double[]>>();
@@ -28,6 +29,7 @@ namespace TimingAnalysis
         public VisualizeForm(int interval, int signal_length, int stimulation_frequency)
         {
             InitializeComponent();
+            _interval = interval;
             stimulationTimer.Interval = interval;
             _signal_length = signal_length;
             _stimulation_frequency = stimulation_frequency;
@@ -65,7 +67,7 @@ namespace TimingAnalysis
             reseiveClientControl1.Client.StartClient();
             for (int i = 0; i < 29; i++)
             {
-                helpD.Add(titles[i], new double[signal_length]);
+                helpD.Add(titles[i], new double[(int)(_signal_length + (_interval / 2))]);
             }
 
         }
@@ -113,14 +115,14 @@ namespace TimingAnalysis
 
         private void stimulationDataAccumulation(double currData, int i)
         {
-            if (currentDataLen[i] < _signal_length)
+            if (currentDataLen[i] < (int)(_signal_length +( _interval / 2)))
             {
                 helpD[titles[i]][currentDataLen[i]] = currData;
                 currentDataLen[i]++;
             }
             else
             {
-                if (currentDataLen.All(x => x == _signal_length))
+                if (currentDataLen.All(x => x == (int)(_signal_length +( _interval / 2))))
                 {
                     timerFlag = false;
                     if (withWithoutFlag)
@@ -136,7 +138,7 @@ namespace TimingAnalysis
                     helpD = new Dictionary<string, double[]>();
                     for (int k = 0; k < 29; k++)
                     {
-                        helpD.Add(titles[k], new double[_signal_length]);
+                        helpD.Add(titles[k], new double[(int)(_signal_length +( _interval /2))]);
                     }
                     
                 }
@@ -144,8 +146,20 @@ namespace TimingAnalysis
         }
         private void stimulationTimer_Tick(object sender, EventArgs e)
         {
+            var rnd = new Random().Next(0, 4);
 
-            colorChangeTimer.Start();
+            if (rnd == 0)
+            {
+                timerFlag = true;
+                colorChangeTimer.Start();
+                with.Add(DateTime.Now);
+            }
+            else
+            {
+                timerFlag = true;
+                intervalTimer.Interval = rnd * (_interval / 8);
+                intervalTimer.Start();
+            }
         }
 
         private void colorChangeTimer_Tick(object sender, EventArgs e)
@@ -155,15 +169,15 @@ namespace TimingAnalysis
             {
                 
                 
-                if (rnd == 0)
+                if ((rnd == 0)&(withWithoutFlag))
                 {
-                    flagsChanging(false, true);
+                    flagsChanging(false);
                 }
                 else
                 {
                     mainPictureBox.BackColor = Color.White;
 
-                    flagsChanging(true, true);
+                    flagsChanging(true);
                 }
 
             }
@@ -180,12 +194,12 @@ namespace TimingAnalysis
             
         }
 
-        private void flagsChanging(bool wtWto, bool timer)
+        private void flagsChanging(bool wtWto)
         {
             if (signalFlag)
             {
                 withWithoutFlag = wtWto;
-                timerFlag = timer;
+                
             }
         }
 
@@ -227,31 +241,45 @@ namespace TimingAnalysis
         private void WriteListToFile(StreamWriter writer,
         List<Dictionary<string, double[]>> data)
         {
+            int stimulationCounter = 0;
             foreach (var dictionary in data)
             {
-                for (int i = 0; i < _signal_length; i++)
+                stimulationCounter++;
+                writer.WriteLine();
+                writer.WriteLine($"stimulation {stimulationCounter}");
+                writer.WriteLine();
+                for (int k = 0; k < 5; k++)
                 {
-                    for(int j = 0; j<29;j++)
+                    writer.WriteLine($"stimulation {(k-2)* (_interval / 8)} ms");
+                    for (int i = 0; i < ((int)(_signal_length)); i++)
                     {
-                        writer.Write(dictionary[titles[j]][i] + "\t");
+                        for (int j = 0; j < 29; j++)
+                        {
+                            writer.Write(dictionary[titles[j]][i+(int)(k*_interval/8)] + "\t");
+                        }
+                        writer.Write("\n");
                     }
-                    writer.Write("\n");
+                    writer.WriteLine();
+                    writer.WriteLine("------------------------------------------------------");
+                    writer.WriteLine();
                 }
-                writer.WriteLine();
-                writer.WriteLine("------------------------------------------------------");
-                writer.WriteLine();
 
             }
 
             List<List<double>> avgList = avgListCalc(data);
             writer.WriteLine("AVG:");
-            for (int i = 0; i < _signal_length; i++)
+            for (int k = 0; k < 5; k++)
             {
-                for (int j = 0; j < 29; j++)
+                writer.WriteLine($"stimulation {(k - 2) * (_interval/8)} ms");
+                for (int i = 0; i < _signal_length; i++)
                 {
-                    writer.Write(avgList[j][i] + "\t");
+
+                    for (int j = 0; j < 29; j++)
+                    {
+                        writer.Write(avgList[j][i + (int)(k * _interval / 8)] + "\t");
+                    }
+                    writer.Write("\n");
                 }
-                writer.Write("\n");
             }
         }
         private List<List<double>> avgListCalc(List<Dictionary<string, double[]>> data)
@@ -261,7 +289,7 @@ namespace TimingAnalysis
             {
                 avgList.Add(new List<double>());
 
-                for (int k = 0; k < _signal_length; k++)
+                for (int k = 0; k < (int)(_signal_length +( _interval / 2)); k++)
                 {
 
                     double sum = 0;
@@ -279,6 +307,13 @@ namespace TimingAnalysis
 
             }
             return avgList;
+        }
+
+        private void intervalTimer_Tick(object sender, EventArgs e)
+        {
+            colorChangeTimer.Start();
+            with.Add(DateTime.Now);
+            intervalTimer.Stop();
         }
     }
 }

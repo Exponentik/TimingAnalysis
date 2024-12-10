@@ -26,3 +26,17 @@ C:\Users\ghost\OneDrive\Рабочий стол\TimingAnalysis\TimingAnalysis\ob
 C:\Users\ghost\OneDrive\Рабочий стол\TimingAnalysis\TimingAnalysis\obj\Debug\TimingAnalysis.csproj.CopyComplete
 C:\Users\ghost\OneDrive\Рабочий стол\TimingAnalysis\TimingAnalysis\obj\Debug\TimingAnalysis.exe
 C:\Users\ghost\OneDrive\Рабочий стол\TimingAnalysis\TimingAnalysis\obj\Debug\TimingAnalysis.pdb
+C:\Users\user\Documents\TimingAnalysis\TimingAnalysis\bin\Debug\TimingAnalysis.exe.config
+C:\Users\user\Documents\TimingAnalysis\TimingAnalysis\bin\Debug\TimingAnalysis.exe
+C:\Users\user\Documents\TimingAnalysis\TimingAnalysis\bin\Debug\TimingAnalysis.pdb
+C:\Users\user\Documents\TimingAnalysis\TimingAnalysis\bin\Debug\FoundationLibrary.dll
+C:\Users\user\Documents\TimingAnalysis\TimingAnalysis\bin\Debug\NetManager.dll
+C:\Users\user\Documents\TimingAnalysis\TimingAnalysis\obj\Debug\TimingAnalysis.csproj.AssemblyReference.cache
+C:\Users\user\Documents\TimingAnalysis\TimingAnalysis\obj\Debug\TimingAnalysis.SettingsForm.resources
+C:\Users\user\Documents\TimingAnalysis\TimingAnalysis\obj\Debug\TimingAnalysis.Properties.Resources.resources
+C:\Users\user\Documents\TimingAnalysis\TimingAnalysis\obj\Debug\TimingAnalysis.VisualizeForm.resources
+C:\Users\user\Documents\TimingAnalysis\TimingAnalysis\obj\Debug\TimingAnalysis.csproj.GenerateResource.cache
+C:\Users\user\Documents\TimingAnalysis\TimingAnalysis\obj\Debug\TimingAnalysis.csproj.CoreCompileInputs.cache
+C:\Users\user\Documents\TimingAnalysis\TimingAnalysis\obj\Debug\TimingAn.6B9491D9.Up2Date
+C:\Users\user\Documents\TimingAnalysis\TimingAnalysis\obj\Debug\TimingAnalysis.exe
+C:\Users\user\Documents\TimingAnalysis\TimingAnalysis\obj\Debug\TimingAnalysis.pdb
