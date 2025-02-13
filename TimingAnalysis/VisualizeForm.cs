@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 
@@ -12,6 +14,7 @@ namespace TimingAnalysis
     {
         int _signal_length;
         int _stimulation_frequency;
+        int _interval;
         private bool isBlack = true;
         List<String> titles = new List<String>();
         List<Dictionary<String, double[]>> withStimulation = new List<Dictionary<String, double[]>>();
@@ -23,15 +26,35 @@ namespace TimingAnalysis
         int[] currentDataLen = new int[29];
         List<DateTime> with = new List<DateTime>();
         List<DateTime> without = new List<DateTime>();
-
+        Random rnd = new Random();
+        int[] randomize_list = new int[1000];
+        int randomize_counter = 0;
 
         public VisualizeForm(int interval, int signal_length, int stimulation_frequency)
         {
             InitializeComponent();
-            stimulationTimer.Interval = interval;
+            _interval = interval;
             _signal_length = signal_length;
             _stimulation_frequency = stimulation_frequency;
-            stimulationTimer.Start();
+
+            for (int i = 0; i < 1000; i++)
+            {
+                // Generate a random number
+                int newValue = rnd.Next(0, _stimulation_frequency);
+
+                // If the previous value was zero, make sure the new value isn't zero
+                if (i > 0 && newValue == 0 && randomize_list[i - 1] == 0)
+                {
+                    // Regenerate the value until it's non-zero
+                    while (newValue == 0)
+                    {
+                        newValue = rnd.Next(0, _stimulation_frequency);
+                    }
+                }
+
+                // Assign the value to the list
+                randomize_list[i] = newValue;
+            }
 
             titles.Add("FP1");
             titles.Add("F3");
@@ -67,8 +90,34 @@ namespace TimingAnalysis
             {
                 helpD.Add(titles[i], new double[signal_length]);
             }
+            startExperiment();
 
         }
+
+        private async Task startExperiment()
+        {
+            while (true)
+            {
+                label1.Text = randomize_list[randomize_counter].ToString();
+
+                if (randomize_list[randomize_counter] == 0)
+                {
+                    flagsChanging(false, true);
+                }
+                else
+                {
+                    flagsChanging(true, true);
+                    mainPictureBox.BackColor = Color.White;
+                    await Task.Delay(100); // Асинхронная задержка вместо Thread.Sleep(100)
+                    mainPictureBox.BackColor = Color.Black;
+                }
+
+                await Task.Delay(_interval-100); // Асинхронная задержка вместо Thread.Sleep(_interval)
+                randomize_counter = (randomize_counter + 1) % 1000;
+            }
+        }
+
+
         private readonly object lockObject = new object();
         private void MessageHandler(object sender, NetManager.EventClientMsgArgs e)
         {
@@ -142,43 +191,7 @@ namespace TimingAnalysis
                 }
             }
         }
-        private void stimulationTimer_Tick(object sender, EventArgs e)
-        {
 
-            colorChangeTimer.Start();
-        }
-
-        private void colorChangeTimer_Tick(object sender, EventArgs e)
-        {
-            var rnd = new Random().Next(0, _stimulation_frequency);
-            if (isBlack)
-            {
-                
-                
-                if (rnd == 0)
-                {
-                    flagsChanging(false, true);
-                }
-                else
-                {
-                    mainPictureBox.BackColor = Color.White;
-
-                    flagsChanging(true, true);
-                }
-
-            }
-            else
-            {
-                if (rnd != 0)
-                {
-                    mainPictureBox.BackColor = Color.Black;
-                    colorChangeTimer.Stop();
-                }
-            }
-
-            isBlack = !isBlack;
-            
-        }
 
         private void flagsChanging(bool wtWto, bool timer)
         {
@@ -216,13 +229,14 @@ namespace TimingAnalysis
                     with.Sort();
 
                     Console.WriteLine("Данные успешно записаны в файл.");
+                    reseiveClientControl1.Client.StopClient();
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Произошла ошибка: {ex.Message}");
             }
-            reseiveClientControl1.Client.StopClient();
+            
         }
         private void WriteListToFile(StreamWriter writer,
         List<Dictionary<string, double[]>> data)
