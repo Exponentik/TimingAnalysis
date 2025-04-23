@@ -15,10 +15,13 @@ namespace TimingAnalysis
         int _signal_length;
         int _stimulation_frequency;
         int _interval;
+        int _stimulation_number;
         private bool isBlack = true;
         List<String> titles = new List<String>();
         List<Dictionary<String, double[]>> withStimulation = new List<Dictionary<String, double[]>>();
         List<Dictionary<String, double[]>> withoutStimulation = new List<Dictionary<String, double[]>>();
+        List<DateTime> withStimulation_time = new List<DateTime>();
+        List<DateTime> withoutStimulation_time = new List<DateTime>();
         bool timerFlag = false;
         bool signalFlag = false;
         bool withWithoutFlag = false;
@@ -30,14 +33,15 @@ namespace TimingAnalysis
         int[] randomize_list = new int[1000];
         int randomize_counter = 0;
 
-        public VisualizeForm(int interval, int signal_length, int stimulation_frequency)
+        public VisualizeForm(int interval, int signal_length, int stimulation_frequency, int stimulation_number)
         {
             InitializeComponent();
             _interval = interval;
             _signal_length = signal_length;
             _stimulation_frequency = stimulation_frequency;
+            _stimulation_number = stimulation_number;
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < stimulation_number; i++)
             {
                 // Generate a random number
                 int newValue = rnd.Next(0, _stimulation_frequency);
@@ -90,16 +94,16 @@ namespace TimingAnalysis
             {
                 helpD.Add(titles[i], new double[signal_length]);
             }
-            startExperiment();
+
 
         }
 
         private async Task startExperiment()
         {
-            while (true)
+            
+            await Task.Delay(3000);
+            for (int i = 0; i < _stimulation_number; i++)
             {
-                label1.Text = randomize_list[randomize_counter].ToString();
-
                 if (randomize_list[randomize_counter] == 0)
                 {
                     flagsChanging(false, true);
@@ -108,14 +112,18 @@ namespace TimingAnalysis
                 {
                     flagsChanging(true, true);
                     mainPictureBox.BackColor = Color.White;
-                    await Task.Delay(100); // Асинхронная задержка вместо Thread.Sleep(100)
+                    await Task.Delay(100); // Async delay instead of Thread.Sleep(100)
                     mainPictureBox.BackColor = Color.Black;
                 }
 
-                await Task.Delay(_interval-100); // Асинхронная задержка вместо Thread.Sleep(_interval)
+                await Task.Delay(_interval - 100); // Async delay instead of Thread.Sleep(_interval)
                 randomize_counter = (randomize_counter + 1) % 1000;
             }
+
+            // Ensure the form close happens on the UI thread
+            this.Invoke((Action)(() => this.Close()));
         }
+
 
 
         private readonly object lockObject = new object();
@@ -123,7 +131,11 @@ namespace TimingAnalysis
         {
             lock (lockObject)
             {
-                signalFlag = true;
+                if (!signalFlag&&(this.WindowState == FormWindowState.Maximized))
+                {
+                    signalFlag = true;
+                    startExperiment();
+                }
                 Frame f = new Frame(e.Msg);
                 var bucket = new double[29, 24];
                 var data = f.Data;
@@ -175,10 +187,12 @@ namespace TimingAnalysis
                     if (withWithoutFlag)
                     {
                         withStimulation.Add(helpD);
+                        withStimulation_time.Add(DateTime.Now);
                     }
                     else
                     {
                         withoutStimulation.Add(helpD);
+                        withoutStimulation_time.Add(DateTime.Now);
                     }
                     currentDataLen = new int[29];
                     //with.Add(DateTime.Now);
@@ -208,23 +222,23 @@ namespace TimingAnalysis
         {
             try
             {
-                string directoryPath = Path.Combine("..", "results");
+                string directoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "results");
 
                 // Создаем директорию, если она не существует
                 Directory.CreateDirectory(directoryPath);
                 string fileName = $"res_{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.txt";
-                using (StreamWriter writer = new StreamWriter(Path.Combine("..\\results", fileName)))
+                using (StreamWriter writer = new StreamWriter(Path.Combine(directoryPath, fileName)))
                 {
                     // Записываем данные с стимулированием
                     writer.WriteLine("With Stimulation:");
-                    WriteListToFile(writer, withStimulation);
+                    WriteListToFile(writer, withStimulation, withStimulation_time);
 
                     // Разделитель между секциями
                     writer.WriteLine();
 
                     // Записываем данные без стимулирования
                     writer.WriteLine("Without Stimulation:");
-                    WriteListToFile(writer, withoutStimulation);
+                    WriteListToFile(writer, withoutStimulation, withoutStimulation_time);
                     with.AddRange(without);
                     with.Sort();
 
@@ -239,10 +253,13 @@ namespace TimingAnalysis
             
         }
         private void WriteListToFile(StreamWriter writer,
-        List<Dictionary<string, double[]>> data)
+        List<Dictionary<string, double[]>> data, List<DateTime> time)
         {
             foreach (var dictionary in data)
             {
+
+                writer.Write(time[data.IndexOf(dictionary)].ToString());
+                writer.Write("\n");
                 for (int i = 0; i < _signal_length; i++)
                 {
                     for(int j = 0; j<29;j++)

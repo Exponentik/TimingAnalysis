@@ -19,13 +19,28 @@ namespace TimingAnalysis
         private void experiment_start()
         {
 
-            VisualizeForm vis_form = new VisualizeForm(int.Parse(timerTextBox.Text), int.Parse(signalTextBox.Text), int.Parse(textBox1.Text));
+            VisualizeForm vis_form = new VisualizeForm(int.Parse(timerTextBox.Text), int.Parse(signalTextBox.Text), int.Parse(textBox1.Text), int.Parse(StimulationNumberTextBox.Text));
             vis_form.ShowDialog();  
             
         }
         private void button1_Click(object sender, EventArgs e)
         {
             experiment_start();
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
