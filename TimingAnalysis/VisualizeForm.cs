@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection.Emit;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 
@@ -13,6 +15,7 @@ namespace TimingAnalysis
         int _signal_length;
         int _stimulation_frequency;
         int _interval;
+        int _stimulation_number;
         private bool isBlack = true;
         List<String> titles = new List<String>();
         List<Dictionary<String, double[]>> withStimulation = new List<Dictionary<String, double[]>>();
@@ -24,16 +27,39 @@ namespace TimingAnalysis
         int[] currentDataLen = new int[29];
         List<DateTime> with = new List<DateTime>();
         List<DateTime> without = new List<DateTime>();
+        List<int> stimulation_timings = new List<int>();
+        Random rnd = new Random();
+        int[] randomize_list = new int[1000];
+        
 
 
-        public VisualizeForm(int interval, int signal_length, int stimulation_frequency)
+        public VisualizeForm(int interval, int signal_length, int stimulation_frequency, int stimulation_number)
         {
             InitializeComponent();
             _interval = interval;
-            stimulationTimer.Interval = interval;
+
             _signal_length = signal_length;
             _stimulation_frequency = stimulation_frequency;
-            stimulationTimer.Start();
+            _stimulation_number = stimulation_number;
+            //stimulationTimer.Start();
+            for (int i = 0; i < stimulation_number; i++)
+            {
+                // Generate a random number
+                int newValue = rnd.Next(0, _stimulation_frequency);
+
+                // If the previous value was zero, make sure the new value isn't zero
+                if (i > 0 && newValue == 0 && randomize_list[i - 1] == 0)
+                {
+                    // Regenerate the value until it's non-zero
+                    while (newValue == 0)
+                    {
+                        newValue = rnd.Next(0, _stimulation_frequency);
+                    }
+                }
+
+                // Assign the value to the list
+                randomize_list[i] = newValue;
+            }
 
             titles.Add("FP1");
             titles.Add("F3");
@@ -70,13 +96,70 @@ namespace TimingAnalysis
                 helpD.Add(titles[i], new double[(int)(_signal_length + (_interval / 2))]);
             }
 
+     
+
+        }
+
+        private async Task startExperiment()
+        {
+            await Task.Delay(3000);
+            Random random = new Random();
+            for (int i = 0; i < _stimulation_number; i++)
+            {
+                var rnd = random.Next(0, 4);
+                stimulation_timings.Add(rnd);
+                timerFlag = true;
+                if (rnd == 0)
+                {
+                    if (randomize_list[i] == 0)
+                    {
+                        flagsChanging(false);
+                    }
+                    else
+                    {
+                        flagsChanging(true);
+                        mainPictureBox.BackColor = Color.White;
+                        await Task.Delay(100); // Асинхронная задержка вместо Thread.Sleep(100)
+                        mainPictureBox.BackColor = Color.Black;
+                    }
+                    with.Add(DateTime.Now);
+                    await Task.Delay(_interval - 100); // Асинхронная задержка вместо Thread.Sleep(_interval)
+                    
+                }
+                else
+                {
+                    await Task.Delay(rnd * (_interval / 8));
+                    if (randomize_list[i] == 0)
+                    {
+                        flagsChanging(false);
+                    }
+                    else
+                    {
+                        flagsChanging(true);
+                        mainPictureBox.BackColor = Color.White;
+                        await Task.Delay(100); // Асинхронная задержка вместо Thread.Sleep(100)
+                        mainPictureBox.BackColor = Color.Black;
+                    }
+                    with.Add(DateTime.Now);
+                    await Task.Delay(_interval - 100); // Асинхронная задержка вместо Thread.Sleep(_interval)
+                    
+                }
+
+                
+            }
+            this.Invoke((Action)(() => this.Close()));
         }
         private readonly object lockObject = new object();
         private void MessageHandler(object sender, NetManager.EventClientMsgArgs e)
         {
             lock (lockObject)
             {
-                signalFlag = true;
+                if (!signalFlag && (this.WindowState == FormWindowState.Maximized))
+                {
+                    signalFlag = true;
+                    startExperiment();
+                }
+               
                 Frame f = new Frame(e.Msg);
                 var bucket = new double[29, 24];
                 var data = f.Data;
@@ -144,55 +227,7 @@ namespace TimingAnalysis
                 }
             }
         }
-        private void stimulationTimer_Tick(object sender, EventArgs e)
-        {
-            var rnd = new Random().Next(0, 4);
 
-            if (rnd == 0)
-            {
-                timerFlag = true;
-                colorChangeTimer.Start();
-                with.Add(DateTime.Now);
-            }
-            else
-            {
-                timerFlag = true;
-                intervalTimer.Interval = rnd * (_interval / 8);
-                intervalTimer.Start();
-            }
-        }
-
-        private void colorChangeTimer_Tick(object sender, EventArgs e)
-        {
-            var rnd = new Random().Next(0, _stimulation_frequency);
-            if (isBlack)
-            {
-                
-                
-                if ((rnd == 0)&(withWithoutFlag))
-                {
-                    flagsChanging(false);
-                }
-                else
-                {
-                    mainPictureBox.BackColor = Color.White;
-
-                    flagsChanging(true);
-                }
-
-            }
-            else
-            {
-                if (rnd != 0)
-                {
-                    mainPictureBox.BackColor = Color.Black;
-                    colorChangeTimer.Stop();
-                }
-            }
-
-            isBlack = !isBlack;
-            
-        }
 
         private void flagsChanging(bool wtWto)
         {
@@ -209,12 +244,12 @@ namespace TimingAnalysis
         {
             try
             {
-                string directoryPath = Path.Combine("..", "results");
+                string directoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "results");
 
                 // Создаем директорию, если она не существует
                 Directory.CreateDirectory(directoryPath);
                 string fileName = $"res_{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.txt";
-                using (StreamWriter writer = new StreamWriter(Path.Combine("..\\results", fileName)))
+                using (StreamWriter writer = new StreamWriter(Path.Combine(directoryPath, fileName)))
                 {
                     // Записываем данные с стимулированием
                     writer.WriteLine("With Stimulation:");
@@ -231,12 +266,13 @@ namespace TimingAnalysis
 
                     Console.WriteLine("Данные успешно записаны в файл.");
                 }
+                reseiveClientControl1.Client.StopClient();
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Произошла ошибка: {ex.Message}");
             }
-            reseiveClientControl1.Client.StopClient();
+            
         }
         private void WriteListToFile(StreamWriter writer,
         List<Dictionary<string, double[]>> data)
@@ -248,8 +284,11 @@ namespace TimingAnalysis
                 writer.WriteLine();
                 writer.WriteLine($"stimulation {stimulationCounter}");
                 writer.WriteLine();
+                
                 for (int k = 0; k < 5; k++)
                 {
+                    if (k == stimulation_timings[data.IndexOf(dictionary)])
+                        writer.WriteLine("stimulation data");
                     writer.WriteLine($"stimulation {(k-2)* (_interval / 8)} ms");
                     for (int i = 0; i < ((int)(_signal_length)); i++)
                     {
@@ -309,11 +348,6 @@ namespace TimingAnalysis
             return avgList;
         }
 
-        private void intervalTimer_Tick(object sender, EventArgs e)
-        {
-            colorChangeTimer.Start();
-            with.Add(DateTime.Now);
-            intervalTimer.Stop();
-        }
+
     }
 }

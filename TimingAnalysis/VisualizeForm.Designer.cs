@@ -28,13 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VisualizeForm));
             this.mainPictureBox = new System.Windows.Forms.PictureBox();
-            this.stimulationTimer = new System.Windows.Forms.Timer(this.components);
-            this.colorChangeTimer = new System.Windows.Forms.Timer(this.components);
             this.reseiveClientControl1 = new NetManager.Client.ReseiveClientControl();
-            this.intervalTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -50,14 +46,6 @@
             this.mainPictureBox.TabIndex = 0;
             this.mainPictureBox.TabStop = false;
             // 
-            // stimulationTimer
-            // 
-            this.stimulationTimer.Tick += new System.EventHandler(this.stimulationTimer_Tick);
-            // 
-            // colorChangeTimer
-            // 
-            this.colorChangeTimer.Tick += new System.EventHandler(this.colorChangeTimer_Tick);
-            // 
             // reseiveClientControl1
             // 
             this.reseiveClientControl1.ClientName = "FlashStimulationClient";
@@ -67,10 +55,6 @@
             this.reseiveClientControl1.Size = new System.Drawing.Size(174, 98);
             this.reseiveClientControl1.TabIndex = 1;
             this.reseiveClientControl1.ReseiveData += new System.EventHandler<NetManager.EventClientMsgArgs>(this.MessageHandler);
-            // 
-            // intervalTimer
-            // 
-            this.intervalTimer.Tick += new System.EventHandler(this.intervalTimer_Tick);
             // 
             // VisualizeForm
             // 
@@ -90,9 +74,6 @@
         #endregion
 
         private System.Windows.Forms.PictureBox mainPictureBox;
-        private System.Windows.Forms.Timer stimulationTimer;
-        private System.Windows.Forms.Timer colorChangeTimer;
         private NetManager.Client.ReseiveClientControl reseiveClientControl1;
-        private System.Windows.Forms.Timer intervalTimer;
     }
 }

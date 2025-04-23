@@ -18,8 +18,7 @@ namespace TimingAnalysis
         }
         private void experiment_start()
         {
-
-            VisualizeForm vis_form = new VisualizeForm(int.Parse(timerTextBox.Text), int.Parse(signalTextBox.Text), int.Parse(textBox1.Text));
+            VisualizeForm vis_form = new VisualizeForm(int.Parse(timerTextBox.Text), int.Parse(signalTextBox.Text), int.Parse(textBox1.Text), int.Parse(StimulationNumberTextBox.Text));
             vis_form.ShowDialog();  
             
         }

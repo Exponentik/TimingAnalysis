@@ -1,0 +1,136 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\user\\Documents\\TimingAnalysis2\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{06CE5E6A-D137-4EC0-B704-A4BEF6B2390B}|TimingAnalysis\\TimingAnalysis.csproj|C:\\Users\\user\\Documents\\TimingAnalysis2\\timinganalysis\\visualizeform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{06CE5E6A-D137-4EC0-B704-A4BEF6B2390B}|TimingAnalysis\\TimingAnalysis.csproj|solutionrelative:timinganalysis\\visualizeform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{06CE5E6A-D137-4EC0-B704-A4BEF6B2390B}|TimingAnalysis\\TimingAnalysis.csproj|C:\\Users\\user\\Documents\\TimingAnalysis2\\timinganalysis\\visualizeform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{06CE5E6A-D137-4EC0-B704-A4BEF6B2390B}|TimingAnalysis\\TimingAnalysis.csproj|solutionrelative:timinganalysis\\visualizeform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{06CE5E6A-D137-4EC0-B704-A4BEF6B2390B}|TimingAnalysis\\TimingAnalysis.csproj|C:\\Users\\user\\Documents\\TimingAnalysis2\\timinganalysis\\visualizeform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{06CE5E6A-D137-4EC0-B704-A4BEF6B2390B}|TimingAnalysis\\TimingAnalysis.csproj|solutionrelative:timinganalysis\\visualizeform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{06CE5E6A-D137-4EC0-B704-A4BEF6B2390B}|TimingAnalysis\\TimingAnalysis.csproj|c:\\users\\user\\documents\\timinganalysis2\\timinganalysis\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{06CE5E6A-D137-4EC0-B704-A4BEF6B2390B}|TimingAnalysis\\TimingAnalysis.csproj|solutionrelative:timinganalysis\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{06CE5E6A-D137-4EC0-B704-A4BEF6B2390B}|TimingAnalysis\\TimingAnalysis.csproj|c:\\users\\user\\documents\\timinganalysis2\\timinganalysis\\form1.resx||{FF4D6ACA-9352-4A5F-821E-F4D6EBDCAB11}",
+      "RelativeMoniker": "D:0:0:{06CE5E6A-D137-4EC0-B704-A4BEF6B2390B}|TimingAnalysis\\TimingAnalysis.csproj|solutionrelative:timinganalysis\\form1.resx||{FF4D6ACA-9352-4A5F-821E-F4D6EBDCAB11}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{06CE5E6A-D137-4EC0-B704-A4BEF6B2390B}|TimingAnalysis\\TimingAnalysis.csproj|c:\\users\\user\\documents\\timinganalysis2\\timinganalysis\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{06CE5E6A-D137-4EC0-B704-A4BEF6B2390B}|TimingAnalysis\\TimingAnalysis.csproj|solutionrelative:timinganalysis\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{06CE5E6A-D137-4EC0-B704-A4BEF6B2390B}|TimingAnalysis\\TimingAnalysis.csproj|c:\\users\\user\\documents\\timinganalysis2\\timinganalysis\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{06CE5E6A-D137-4EC0-B704-A4BEF6B2390B}|TimingAnalysis\\TimingAnalysis.csproj|solutionrelative:timinganalysis\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Form1.cs",
+              "DocumentMoniker": "C:\\Users\\user\\Documents\\TimingAnalysis2\\TimingAnalysis\\Form1.cs",
+              "RelativeDocumentMoniker": "TimingAnalysis\\Form1.cs",
+              "ToolTip": "C:\\Users\\user\\Documents\\TimingAnalysis2\\TimingAnalysis\\Form1.cs",
+              "RelativeToolTip": "TimingAnalysis\\Form1.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABQAAAC4AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-11T10:29:54.862Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Form1.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\user\\Documents\\TimingAnalysis2\\TimingAnalysis\\Form1.Designer.cs",
+              "RelativeDocumentMoniker": "TimingAnalysis\\Form1.Designer.cs",
+              "ToolTip": "C:\\Users\\user\\Documents\\TimingAnalysis2\\TimingAnalysis\\Form1.Designer.cs",
+              "RelativeToolTip": "TimingAnalysis\\Form1.Designer.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-11T10:21:01.569Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Form1.resx",
+              "DocumentMoniker": "C:\\Users\\user\\Documents\\TimingAnalysis2\\TimingAnalysis\\Form1.resx",
+              "RelativeDocumentMoniker": "TimingAnalysis\\Form1.resx",
+              "ToolTip": "C:\\Users\\user\\Documents\\TimingAnalysis2\\TimingAnalysis\\Form1.resx",
+              "RelativeToolTip": "TimingAnalysis\\Form1.resx",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
+              "WhenOpened": "2025-03-11T10:21:01.411Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Form1.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\user\\Documents\\TimingAnalysis2\\TimingAnalysis\\Form1.cs",
+              "RelativeDocumentMoniker": "TimingAnalysis\\Form1.cs",
+              "ToolTip": "C:\\Users\\user\\Documents\\TimingAnalysis2\\TimingAnalysis\\Form1.cs [Design]",
+              "RelativeToolTip": "TimingAnalysis\\Form1.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-10T19:56:55.675Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "VisualizeForm.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\user\\Documents\\TimingAnalysis2\\TimingAnalysis\\VisualizeForm.Designer.cs",
+              "RelativeDocumentMoniker": "TimingAnalysis\\VisualizeForm.Designer.cs",
+              "ToolTip": "C:\\Users\\user\\Documents\\TimingAnalysis2\\TimingAnalysis\\VisualizeForm.Designer.cs",
+              "RelativeToolTip": "TimingAnalysis\\VisualizeForm.Designer.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAEwAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-13T14:53:24.086Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "VisualizeForm.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\user\\Documents\\TimingAnalysis2\\TimingAnalysis\\VisualizeForm.cs",
+              "RelativeDocumentMoniker": "TimingAnalysis\\VisualizeForm.cs",
+              "ToolTip": "C:\\Users\\user\\Documents\\TimingAnalysis2\\TimingAnalysis\\VisualizeForm.cs [Design]",
+              "RelativeToolTip": "TimingAnalysis\\VisualizeForm.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-13T15:36:42.546Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "VisualizeForm.cs",
+              "DocumentMoniker": "C:\\Users\\user\\Documents\\TimingAnalysis2\\TimingAnalysis\\VisualizeForm.cs",
+              "RelativeDocumentMoniker": "TimingAnalysis\\VisualizeForm.cs",
+              "ToolTip": "C:\\Users\\user\\Documents\\TimingAnalysis2\\TimingAnalysis\\VisualizeForm.cs",
+              "RelativeToolTip": "TimingAnalysis\\VisualizeForm.cs",
+              "ViewState": "AQIAAFgAAAAAAAAAAAAgwJUAAAA2AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-10T22:28:25.527Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
